@@ -1,0 +1,37 @@
+*{
+    color: white;
+    margin: 0;
+    padding: 5px;
+}
+body{
+    background: no-repeat url("./wallpaper.png");
+    background-size: cover;
+}
+.input{
+    height: 70%;
+    width:70%;
+    color: black;
+   height: fit-content;
+   overflow: visible;
+   z-index: 5;
+    border: 0;
+    ;
+}
+.add-note-tool{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+textarea{
+    color: black;
+    background-color: white;
+    min-height: 200px;
+    border: none;
+}
+
+.note-item{
+    display: flex;
+    flex-direction: column;
+}
