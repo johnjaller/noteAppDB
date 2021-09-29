@@ -9,13 +9,13 @@ class NoteService{
         return query.then((data)=>{
         console.log(data)
             return data
-        })
+        }).catch((err)=> {if(err) throw err})
     }
     addNote(user,data)
     {
         let userId=this.knex.select('id').from('users').where('username',user)
         let query=this.knex('notes').insert({content:data,user_id:userId})
-        return query
+        return query.catch((err)=> {if(err) throw err})
         // Insert into notes (content,user_id) VALUES('Hello World',(select id from users where username='sam'));
         
     }
@@ -24,14 +24,14 @@ class NoteService{
         let userId=this.knex.select('id').from('users').where('username',user)
 
         let query=this.knex('notes').update('content',data).where('id',index).where('user_id',userId)
-        return query
+        return query.catch((err)=> {if(err) throw err})
     }
     deleteNote(user,index)
     {
         let userId=this.knex.select('id').from('users').where('username',user)
 
         let query=this.knex('notes').where('id',index).where('user_id',userId).where('user_id',userId).del()
-        return query
+        return query.catch((err)=> {if(err) throw err})
     }
 }
 
