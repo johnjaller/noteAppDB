@@ -1,103 +1,37 @@
-const NoteService = require("./noteService.js");
-const fs = require("fs");
-describe("NoteService testing on Promise and init()", () => {
-  beforeEach(() => {
-    data = {
-      sam: ["awesome", "a", "fucking ", "asda", "dasd"],
-      aka: ["OMG", "AMAZING", "one moe?", "last note"],
-      john: ["Fuck"],
-    };
-    dataString = JSON.stringify(data);
-    testFilePath = "/testdata.json";
-    fs.writeFileSync(__dirname + testFilePath, dataString, "utf-8");
-    noteService = new NoteService("/testdata.json");
-  });
-  test("init() should retrieve data from file to this.note", () => {
-    noteService.init();
-    expect(noteService.note).toEqual(data);
-  });
-  test("readData() should resolve data string from target filepath", () => {
-    expect(noteService.readData()).resolves.toBe(dataString);
-  });
-  test("writeData() should resolve target filepath", () => {
-    expect(noteService.writeData(dataString)).resolves.toBe(testFilePath);
-  });
-  
-});
+const NoteService = require("./service/NoteService.js");
+const knexConfig = require("./knexfile").development;
+const knex = require("knex")(knexConfig);
+
 
 describe("NoteService testing on async function", () => {
   beforeEach(() => {
-    data = {
-      sam: ["awesome", "a", "fucking ", "asda", "dasd"],
-      aka: ["OMG", "AMAZING", "one moe?", "last note"],
-      john: ["Fuck"],
-    };
-    dataString = JSON.stringify(data);
-    testFilePath = "/testdata.json";
-    fs.writeFileSync(__dirname + testFilePath, dataString, "utf-8");
-    noteService = new NoteService("/testdata.json");
+    return knex.migrate.rollback().then(()=>{return knex.migrate.latest()}).then(()=>{return knex.seed.run()})
 });
-test("addNote(data,user) should add data to specific user", () => {
-    let spyOnWriteData=jest.spyOn(noteService,"writeData")
-    spyOnWriteData.mockImplementation((data)=> console.log(data))
-    let newData = "Hard working";
-    let user = "sam";
-    noteService.addNote(newData, user);
-    expect(noteService.note[user]).toEqual([
-      "awesome",
-      "a",
-      "fucking ",
-      "asda",
-      "dasd",
-      "Hard working",
-    ]);
-    expect(spyOnWriteData).toHaveBeenCalled()
+test("listNote(user) should display data to specific user", async() => {
+  let noteService=new NoteService(knex)
+   let note= await noteService.listNote('sam')
+   expect(note).toEqual([{ content: 'Hello World', id: 1 }, { content: 'What?', id: 2 }])
 
 })
-test("addNote(data,user) should add data to new user if no user can be found in data", () => {
-    let spyOnWriteData=jest.spyOn(noteService,"writeData")
-    spyOnWriteData.mockImplementation((data)=> console.log(data))
-    let newData = "Hard working";
-    let user = "Ken";
-    noteService.addNote(newData, user);
-    expect(noteService.note[user]).toEqual([
-      newData
-    ]);
-    expect(spyOnWriteData).toHaveBeenCalled()
+test("addNote(user) should add data to specific user", async() => {
+  let noteService=new NoteService(knex)
+   let add=await noteService.addNote('sam','good morning')
+   let note= await noteService.listNote('sam')
+   expect(note).toEqual([{ content: 'Hello World', id: 1 }, { content: 'What?', id: 2 },{ content: 'good morning', id: 3 }])
 
 })
-test("readNote(data,user) should return specific note to respective user", async() => {
-    let user = "sam";
-    
-   await expect(noteService.readNote(user)).resolves.toEqual(["awesome", "a", "fucking ", "asda", "dasd"]);
+test("editNote(user,index) should edit specific note for specific user", async() => {
+  let noteService=new NoteService(knex)
+   let edit=await noteService.editNote('sam',2,'good morning')
+   let note= await noteService.listNote('sam')
+   expect(note).toEqual([{ content: 'Hello World', id: 1 }, { content: 'good morning', id: 2 }])
 
 })
-test("readNote(data,user) should return specific note to new user", async() => {
-  let user = "ken";
-  
- await expect(noteService.readNote(user)).resolves.toEqual([]);
+test("deleteNote(user) should delete note for specific user", async() => {
+  let noteService=new NoteService(knex)
+   let edit=await noteService.deleteNote('sam',2)
+   let note= await noteService.listNote('sam')
+   expect(note).toEqual([{ content: 'Hello World', id: 1 }])
 
 })
-test("editNote(data,user) should change data to respective user ", () => {
-    let spyOnWriteData=jest.spyOn(noteService,"writeData")
-    spyOnWriteData.mockImplementation((data)=> console.log(data))
-    let newData = "Hard working";
-    let index=1
-    let user = "sam";
-    noteService.editNote(newData,index,user)
-    expect(noteService.note[user][index]).toEqual(newData);
-    expect(spyOnWriteData).toHaveBeenCalled()
-
-})
-test("deleteNote(data,user) should delete data to respective user ", () => {
-    let spyOnWriteData=jest.spyOn(noteService,"writeData")
-    spyOnWriteData.mockImplementation((data)=> console.log(data))
-    let index=1
-    let user = "sam";
-    noteService.deleteNote(index,user)
-    expect(noteService.note[user]).toEqual(["awesome", "fucking ", "asda", "dasd"]);
-    expect(spyOnWriteData).toHaveBeenCalled()
-
-})
-
 });

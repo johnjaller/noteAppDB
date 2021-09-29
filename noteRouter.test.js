@@ -34,7 +34,7 @@ describe("testing for route", () => {
         note: "amazing",
       },
     },res).then(()=>{
-       expect(noteService.addNote).toHaveBeenCalledWith("amazing","sam")
+       expect(noteService.addNote).toHaveBeenCalledWith("sam","amazing")
        expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
@@ -48,7 +48,7 @@ describe("testing for route", () => {
         note: "amazing",
       },
     },res).then(()=>{
-       expect(noteService.editNote).toHaveBeenCalledWith("amazing",1,"sam")
+       expect(noteService.editNote).toHaveBeenCalledWith("sam",1,"amazing")
        expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
@@ -60,7 +60,7 @@ describe("testing for route", () => {
       params:{index:1},
       
     },res).then(()=>{
-       expect(noteService.deleteNote).toHaveBeenCalledWith(1,"sam")
+       expect(noteService.deleteNote).toHaveBeenCalledWith("sam",1)
        expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });

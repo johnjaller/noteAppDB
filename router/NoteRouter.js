@@ -13,13 +13,13 @@ class NoteRouter{
     }
     get(req,res)
     {
-        this.NoteService.listNote(req.auth.user).then((data)=>{
+        return this.NoteService.listNote(req.auth.user).then((data)=>{
             res.json(data)
         }).catch((err)=> {if(err) throw err})
     }
     post(req,res)
     {
-        this.NoteService.addNote(req.auth.user,req.body.note).then(()=>{
+        return this.NoteService.addNote(req.auth.user,req.body.note).then(()=>{
             this.NoteService.listNote(req.auth.user).then((data=>{
                 res.json(data)
             }))
@@ -27,7 +27,7 @@ class NoteRouter{
     }
     put(req,res)
     {
-        this.NoteService.editNote(req.auth.user,req.params.index,req.body.note).then(()=>{
+        return this.NoteService.editNote(req.auth.user,req.params.index,req.body.note).then(()=>{
             this.NoteService.listNote(req.auth.user).then((data=>{
                 res.json(data)
             }))
@@ -35,7 +35,7 @@ class NoteRouter{
     }
     delete(req,res)
     {
-        this.NoteService.deleteNote(req.auth.user,req.params.index).then(()=>{
+        return this.NoteService.deleteNote(req.auth.user,req.params.index).then(()=>{
             this.NoteService.listNote(req.auth.user).then((data=>{
                 res.json(data)
             }))
