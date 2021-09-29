@@ -26,7 +26,7 @@ class NoteService{
         let query=this.knex('notes').update('content',data).where('id',index).where('user_id',userId)
         return query
     }
-    deleteNote(user,index,data)
+    deleteNote(user,index)
     {
         let userId=this.knex.select('id').from('users').where('username',user)
 

@@ -1,12 +1,12 @@
 const express = require("express");
 const expressBasicAuth = require("express-basic-auth");
 const app = express();
-const NoteRouter = require("./noteRouter.js");
+const NoteRouter = require("./router/NoteRouter.js");
 
 describe("testing for route", () => {
   beforeEach(() => {
     noteService = {
-      readNote: jest.fn().mockResolvedValue(true),
+      listNote: jest.fn().mockResolvedValue(true),
       addNote: jest.fn().mockResolvedValue(true),
       deleteNote: jest.fn().mockResolvedValue(true),
       editNote: jest.fn().mockResolvedValue(true),
@@ -20,12 +20,12 @@ describe("testing for route", () => {
       },
     };
   });
-  test("get should call readNote",   (done) => {
+  test("get should call listNote",   (done) => {
     noteRouter.get({auth:{user:"sam"}},res).then(()=>{
-       expect(noteService.readNote).toHaveBeenCalledWith("sam")
+       expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
-  test("post should call addNote and readNote",   (done) => {
+  test("post should call addNote and listNote",   (done) => {
     noteRouter.post(  {
       auth: {
         user: "sam",
@@ -35,10 +35,10 @@ describe("testing for route", () => {
       },
     },res).then(()=>{
        expect(noteService.addNote).toHaveBeenCalledWith("amazing","sam")
-       expect(noteService.readNote).toHaveBeenCalledWith("sam")
+       expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
-  test("put should call editNote and readNote",   (done) => {
+  test("put should call editNote and listNote",   (done) => {
     noteRouter.put(  {
       auth: {
         user: "sam",
@@ -49,10 +49,10 @@ describe("testing for route", () => {
       },
     },res).then(()=>{
        expect(noteService.editNote).toHaveBeenCalledWith("amazing",1,"sam")
-       expect(noteService.readNote).toHaveBeenCalledWith("sam")
+       expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
-  test("delete should call deleteNote and readNote",   (done) => {
+  test("delete should call deleteNote and listNote",   (done) => {
     noteRouter.delete(  {
       auth: {
         user: "sam",
@@ -61,7 +61,7 @@ describe("testing for route", () => {
       
     },res).then(()=>{
        expect(noteService.deleteNote).toHaveBeenCalledWith(1,"sam")
-       expect(noteService.readNote).toHaveBeenCalledWith("sam")
+       expect(noteService.listNote).toHaveBeenCalledWith("sam")
     done()})
   });
 });

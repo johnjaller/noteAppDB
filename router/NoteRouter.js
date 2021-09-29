@@ -35,7 +35,7 @@ class NoteRouter{
     }
     delete(req,res)
     {
-        this.NoteService.deleteNote(req.auth.user,req.params.index,req.body.note).then(()=>{
+        this.NoteService.deleteNote(req.auth.user,req.params.index).then(()=>{
             this.NoteService.listNote(req.auth.user).then((data=>{
                 res.json(data)
             }))
