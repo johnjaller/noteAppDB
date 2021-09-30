@@ -34,7 +34,7 @@ $(document).on("click",".add-note",()=>{
        
     },
     error: function(){
-        console.log("You fuck up");
+        console.log("You are doomed");
     },
         type: "post",
         url: "/api/notes/",
@@ -59,7 +59,7 @@ let changedText=$(this).val()
        
     },
     error: function(){
-        console.log("You fuck up");
+        console.log("You are doomed");
     },
         type: "put",
         url: "/api/notes/"+changedIndex,
