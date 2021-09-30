@@ -30,6 +30,8 @@ app.get("/",(req,res)=>{
             username:req.auth.user,
             noteArr:data
         })
+    }).catch((e)=>{
+        throw e
     })
     })
 
