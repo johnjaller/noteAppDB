@@ -16,19 +16,23 @@ describe("NoteService testing on async function", () => {
     noteService=new NoteService(knex)
     return knex.migrate.rollback().then(()=>{return knex.migrate.latest()}).then(()=>{return knex.seed.run()})
 });
-afterAll(() => setTimeout(() => process.exit(), 1000))
+afterAll(() =>  setTimeout(() => process.exit(), 1000))
 test("listNote(user) should display data to specific user", () => {
    return  noteService.listNote('sam').then((note)=>{
      expect(note).toEqual([{ content: 'Hello World', id: 1 }, { content: 'What?', id: 2 }])
 
-   })
+   }).catch((e)=>{
+        throw e
+    })
 
 })
 test("listNote(user) should display nothing for user if no note can be found", () => {
   return  noteService.listNote('john').then((note)=>{
     expect(note).toEqual([])
 
-  })
+  }).catch((e)=>{
+    throw e
+})
 
 })
 test("addNote(user) should add data to specific user", () => {
@@ -38,7 +42,9 @@ test("addNote(user) should add data to specific user", () => {
         expect(note).toEqual([{ content: 'Hello World', id: 1 }, { content: 'What?', id: 2 },{ content: 'good morning', id: 3 }])
       })
 
-    })
+    }).catch((e)=>{
+      throw e
+  })
 
 })
 test("addNote(user) should only have one note to specific user if no note before", () => {
@@ -48,7 +54,9 @@ test("addNote(user) should only have one note to specific user if no note before
        expect(note).toEqual([{content:'good morning',id:3}])
 
      })
-   })
+   }).catch((e)=>{
+    throw e
+})
 
 })
 test("editNote(user,index) should edit specific note for specific user", async() => {
@@ -58,7 +66,9 @@ test("editNote(user,index) should edit specific note for specific user", async()
 
      })
 
-   })
+   }).catch((e)=>{
+    throw e
+})
 
 })
 test("deleteNote(user) should delete note for specific user", async() => {
@@ -68,7 +78,9 @@ test("deleteNote(user) should delete note for specific user", async() => {
 
      })
 
-   })
+   }).catch((e)=>{
+    throw e
+})
 
 })
 });

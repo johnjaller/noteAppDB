@@ -4,6 +4,8 @@ describe('Router test', () => {
     afterAll(async () => {
         await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
     })
+afterAll(() =>  setTimeout(() => process.exit(), 1000))
+
     test('GET / should return 401 if no auths', (done) => {
         request(app).get("/").expect(401).end(async(err,res)=>{
             if(err) throw err
